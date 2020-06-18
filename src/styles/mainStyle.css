@@ -1,0 +1,151 @@
+@font-face {
+    font-family: "montserratBlack";
+    src: url("../fonts/Montserrat-Black.ttf");
+}
+@font-face {
+    font-family: "montserratBold";
+    src: url("../fonts/Montserrat-Bold.ttf");
+}
+@font-face {
+    font-family: "montserratExtraBold";
+    src: url("../fonts/Montserrat-ExtraBold.ttf");
+}
+@font-face {
+    font-family: "montserratMedium";
+    src: url("../fonts/Montserrat-Medium.ttf");
+}
+@font-face {
+    font-family: "montserratRegular";
+    src: url("../fonts/Montserrat-Regular.ttf");
+}
+
+*{
+    margin: 0rem;
+    padding: 0rem;
+    font-family: "montserratRegular";
+}
+
+body{
+    background: #1A2980;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to top, #26D0CE, #1A2980);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to top, #26D0CE, #1A2980); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    
+}
+
+/* Home page */
+.loRegMain{
+    display: flex;
+    flex-direction: row;
+}
+
+.loRegHome{
+    background: #00d2ff;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to bottom, #3a7bd5, #00d2ff);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to bottom, #3a7bd5, #00d2ff); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    width: 50%;
+    height: 100vh;
+    text-align: center;
+    overflow: hidden;
+    margin-right: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.loRegHome h1{
+    color: #fff;
+    font-family: "montserratBold";
+    font-size: 5rem;
+}
+
+.loRegHome img{
+    position: relative;
+    width: 50%;
+}
+
+.loRegForm{
+    align-self: center;
+    width: 40%;
+    border: none;
+    border-radius: .5rem;
+    padding: 1rem;
+    box-shadow: 0rem 0rem .3rem 0rem #000;
+    outline: none;
+}
+
+.loRegForm form h1{
+    font-family: "montserratExtraBold";
+    text-align: center;
+    color: #eee;
+}
+
+.loRegForm label{
+    font-family: "montserratBold";
+    color: #eee;
+}
+
+/* secretaire Style */
+
+#pagetitle{
+    font-family: "montserratExtraBold";
+    text-align: center;
+    color: #eee;
+}
+
+.secretaire form{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.patient-search-field{
+    width: 80%;
+}
+
+.show-patient{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.patients-field{
+    height: 70vh;
+    width: 80%;
+    overflow: scroll;
+    background-color: rgba(238, 238, 238, 0.8);
+    padding: 1rem;
+    border-radius: .5rem;
+}
+.oprations{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    margin-left: 1rem;
+}
+
+.oprations h1{
+    font-family: "montserratBold";
+    color: #eee;
+}
+
+.consluteButton{
+    color: #007ee5;
+    cursor: pointer;
+    font-family: "montserratBold";
+}
+
+.consluteButton:hover{
+    color: #005ba5;
+}
+
+/* Ajouter partient (secretaire) */
+
+.add-patient-form{
+    padding: 1rem;
+}
+
+.add-patient-form label{
+    font-family: "montserratBold";
+    color: #eee;
+}

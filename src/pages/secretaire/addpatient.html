@@ -1,0 +1,49 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../styles/bootstrap.min.css" />
+    <link rel="stylesheet" href="../../styles/mainStyle.css" />
+    <link rel="stylesheet" href="../../icons/css/all.min.css" />
+    <title>Ajouter Un Patient</title>
+</head>
+<body>
+
+    <div class="add-patient-form">
+        <form id="add-patient-form-form">
+            <div class="form-group">
+              <label for="nom">Nom</label>
+              <input type="text" maxlength="30" minlength="3" pattern="[a-Z]" class="form-control" id="nom" placeholder="Entrez le nom du patient..." />
+            </div>
+    
+            <div class="form-group">
+              <label for="prenom">Prenom</label>
+              <input type="text" max="30" min="3" pattern="[a-Z]" class="form-control" id="prenom" placeholder="Entrez le prenom du patient" />
+            </div> 
+    
+            <div class="form-group">
+              <label for="sexe">Sexe</label>
+              <select class="form-control" id="sexe">
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+              </select>
+            </div>
+    
+            <div class="form-group">
+                <label for="bday">Date De Naissance</label>
+                <input type="date" id="bday" min="1940-01-01" max="2020-12-31" class="form-control" />
+            </div>
+    
+            <div class="form-group">
+                <label for="phone">Numéro de Téléphone</label>
+                <input type="text" class="form-control" id="phone" minlength="10" maxlength="10" pattern="[0-9]{10}" placeholder="Entrez le numéro de téléphone du patient..." />
+            </div> 
+    
+            <button type="submit" class="btn btn-primary"><i class="fas fa-plus" aria-hidden="true"> Ajouter</i></button>
+    
+        </form>
+    </div>
+    
+    <script src="../../scripts/secretaire/addPatient.js"></script>
+</body>
+</html>
