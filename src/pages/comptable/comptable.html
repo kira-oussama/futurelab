@@ -2,9 +2,111 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../styles/bootstrap.min.css" />
+    <link rel="stylesheet" href="../../styles/mainStyle.css" />
+    <link rel="stylesheet" href="../../icons/css/all.min.css" />
     <title>Comptable</title>
 </head>
 <body>
-    <h1>Bonjour comptable</h1>
+    <hr />
+    <h1 id="pagetitle">Comptable</h1>
+    <hr />
+    <div class="comptable-container">
+        
+        <div class="comptable-analyse-container">
+            <form id="addAnalyseForm">
+                <fieldset>
+                    <legend>Ajouter Une Analyse</legend>
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="analyse-name" placeholder="Entrez le nom de l'analyse " required/>
+                      </div>
+                      <div class="form-group">
+                        <input type="number" class="form-control" id="analyse-price" min="0" placeholder="Entrez le prix de l'analyse " required/>
+                      </div>
+                      <button type="submit" class="btn btn-primary"><i class="fas fa-calendar-plus-o" aria-hidden="true"> Ajouter </i></button>
+                </fieldset>
+            </form>
+
+
+
+            <div class="show-analyse">
+                <table id="analyses-table" class="table">
+                    <thead>
+                        <tr>
+                            <th>analyse</th>
+                            <th>prix</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+                    </tbody>
+                </table>
+            </div>
+
+
+
+            <form id="analyse-search-form" class="row">
+                <div class="form-group">
+                    <input type="text" class="form-control" id="analyse-search-input" min="0" placeholder="Entrez le nom de l'analyse " required/>
+                </div>&nbsp;
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary form-control"><i class="fas fa-search" aria-hidden="true"></i></button>
+                </div>
+            </form>
+        </div>
+
+        <div class="comptable-convention-container">
+
+            <form id="addConvention">
+                <fieldset>
+                    <legend>Ajouter Une Convention</legend>
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="society-name" placeholder="Entrez le nom de la Société " required/>
+                    </div>
+                      
+                    <div class="form-group">
+                    <input type="number" class="form-control" id="convention-price" min="1" max="100" placeholder="Entrez le pourcentage de la réduction" required/>
+                    </div>
+
+                    <div class="form-group">
+                      <select class="form-control" id="convention-type">
+                        <option value="total">Total</option>
+                        <option value="partial">Partial</option>
+                      </select>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-calendar-plus-o" aria-hidden="true"> Ajouter </i></button>
+                </fieldset>
+            </form>
+
+
+
+            <div class="show-convention">
+                <table id="conventions-table" class="table">
+                    <thead>
+                        <tr>
+                            <th>société</th>
+                            <th>pourcentage</th>
+                            <th>type</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+                    </tbody>
+                </table>
+            </div>
+
+            <form id="convention-search-form" class="row">
+                <div class="form-group">
+                    <input type="text" class="form-control" id="convention-search-input" min="0" placeholder="Entrez le nom de l'analyse " required/>
+                </div>&nbsp;
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary form-control"><i class="fas fa-search" aria-hidden="true"></i></button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="../../scripts/comptable/comptable.js"></script>
 </body>
 </html>

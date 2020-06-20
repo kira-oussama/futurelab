@@ -1,5 +1,5 @@
 // Modules to control application life and create native browser window
-const { BrowserWindow, Notification} = require('electron');
+const { BrowserWindow, Notification, dialog} = require('electron');
 const path = require('path');
 const {getConnection} = require('./database');
 
@@ -11,15 +11,15 @@ const loginUser = (user)=>{
     if(err) throw err;
 
     if(res.length === 1){ 
-      new Notification({
-        title: "Vous êtes connecté",
-        body: "Bienvenue au FutureLab"
-      });
 
       var window = BrowserWindow.getFocusedWindow();
       switch (res[0].grade) {
         case "sec":
           window.loadFile('src/pages/secretaire/secretaire.html');
+          return new Notification({
+            title: "Vous êtes connecté",
+            body: "Bienvenue au FutureLab"
+          });
           break;
 
         case "com":
@@ -36,6 +36,7 @@ const loginUser = (user)=>{
       
         default:
           break;
+
       }
 
 
@@ -143,8 +144,117 @@ const getPatient = async (id) =>{
   return (patient);
 }
 
+const getPatientsByName = async (name)=>{
+  const conn = getConnection();
+  const patients = [];
+  const query = await conn.query("SELECT * FROM patients WHERE nom = ?",[name], (err, result)=>{
+    if (err) throw err;
+
+    patients.push(result);
+  });
+  return patients;
+}
 
 
+
+// comptable functions
+const addAnalyse = (nom, prix)=>{
+  const conn = getConnection();
+  conn.query("INSERT INTO analyses(nom, prix) values (?, ?)",[nom, prix], (err, result)=>{
+    if (err) throw err;
+
+    new Notification({ 
+          title: "L\'analyse a été ajouté",
+          body: "L\'analyse a été ajouté a la base de donné"
+    });
+
+  });
+}
+
+const addConvention = (societe, pourcentage, type)=>{
+  const conn = getConnection();
+  conn.query("INSERT INTO conventions(societe, pourcentage, type) values (?, ?, ?)",[societe, pourcentage, type], (err, result)=>{
+    if (err) throw err;
+
+    new Notification({ 
+          title: "L\'analyse a été ajouté",
+          body: "L\'analyse a été ajouté a la base de donné"
+    });
+
+  });
+}
+
+const getAllanalyses = async ()=>{
+  const conn = getConnection();
+  var analyses = [];
+  
+  await conn.query("SELECT * FROM analyses", (err, result)=>{
+    if (err) throw err;
+    
+    analyses.push(result);
+  });
+
+  return(analyses);
+}
+
+const getAllconventions = async ()=>{
+  const conn = getConnection();
+  var conventions = [];
+  
+  await conn.query("SELECT * FROM conventions", (err, result)=>{
+    if (err) throw err;
+    
+    conventions.push(result);
+  });
+
+  return(conventions);
+}
+
+const confirmDelete = async (query, id) =>{
+  const conn = getConnection();
+
+  let options = {
+    buttons: ["Oui","Non"],
+    message: "Voulez vous vraiment suprimé ?"
+  }
+
+  let data = await dialog.showMessageBox(options);
+  
+  if(data.response === 0){
+    conn.query(query,[id], (err, result)=>{
+      if(err) throw err;
+      
+      
+    });
+  }
+
+
+}
+
+const getAnalyse = async value=>{
+  const conn = getConnection();
+  const analyses = [];
+  await conn.query("SELECT * FROM analyses WHERE nom = ?", [value], (err, result)=>{
+    if(err) throw err;
+
+    analyses.push(result);
+  });
+
+  return analyses;
+}
+
+const getConvention = async societe=>{
+  const conn = getConnection();
+  const conventions = [];
+
+  await conn.query("SELECT * FROM conventions WHERE societe=?", [societe], (err, result)=>{
+    if(err) throw err;
+
+    conventions.push(result);
+  });
+
+  return conventions;
+}
 
 function createWindow () {
   // Create the browser window.
@@ -160,6 +270,7 @@ function createWindow () {
   mainWindow.maximize();
   mainWindow.show();
   mainWindow.setResizable(false);
+  mainWindow.setMenuBarVisibility(false);
 
   // and load the index.html of the app.
   mainWindow.loadFile('src/pages/index.html')
@@ -171,12 +282,21 @@ module.exports = {
 createWindow,
 loginUser,
 createNewWindow,
-
+// secretaire functions
 addPatient,
 getAllPatients,
 getPatient,
 modifyPatient,
 deletePatient,
+getPatientsByName,
+// comptable functions
+addAnalyse,
+addConvention,
+getAllanalyses,
+getAllconventions,
+confirmDelete,
+getAnalyse,
+getConvention,
 
 closeWindow,
 test

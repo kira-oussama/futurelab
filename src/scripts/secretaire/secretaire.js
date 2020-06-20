@@ -4,7 +4,7 @@ const main = remote.require("./main");
 window.addEventListener("load" , async () => {
     let patients = await main.getAllPatients();
     
-    var table = document.getElementById("patient-table").getElementsByTagName("tbody")[0];
+    let table = document.getElementById("patient-table").getElementsByTagName("tbody")[0];
     for(let i=0; i< patients[0].length ; i++){
         let newRow = table.insertRow(i);
         let consulte = document.createElement('p');
@@ -52,6 +52,45 @@ const consulterPatient = async (id)=>{
 
 document.getElementById("add-patient").addEventListener("click", ()=>{
     main.createNewWindow(600, 480, 'src/pages/secretaire/addpatient.html');
+});
+
+document.getElementById("search-patient-form").addEventListener("submit", async e=>{
+    e.preventDefault();
+    let searchValue = document.getElementById("search-patient").value;
+    let patients = await main.getPatientsByName(searchValue);
+    
+    let table = document.getElementById("patient-table").getElementsByTagName("tbody")[0];
+    table.innerHTML = "";
+    for(let i=0; i< patients[0].length ; i++){
+        let newRow = table.insertRow(i);
+        let consulte = document.createElement('p');
+        consulte.setAttribute('class', 'consluteButton');
+        consulte.setAttribute('id', patients[0][i].patientId);
+        consulte.setAttribute('onClick', "consulterPatient(this.id)")
+
+        //columns
+        let nomCol = newRow.insertCell(0);
+        let prenomCol = newRow.insertCell(1);
+        let sexeCol = newRow.insertCell(2);
+        let consultCol = newRow.insertCell(3);
+
+        //values
+        let nom = document.createTextNode(patients[0][i].nom);
+        let prenom = document.createTextNode(patients[0][i].prenom);
+        let sexe = document.createTextNode(patients[0][i].sexe);
+        let cons = document.createTextNode("Consulter");
+
+        //insert consulter to element p
+        consulte.appendChild(cons);
+
+        //appending
+        nomCol.appendChild(nom);
+        prenomCol.appendChild(prenom);
+        sexeCol.appendChild(sexe);
+        consultCol.appendChild(consulte);
+        
+    }
+    document.getElementById("search-patient").value = '';
 });
 
 document.getElementById("refresh-patients").addEventListener("click", ()=>{

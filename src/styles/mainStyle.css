@@ -149,3 +149,86 @@ body{
     font-family: "montserratBold";
     color: #eee;
 }
+
+
+
+/* Comptable Section */
+
+
+.comptable-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+/* analyse part */
+.comptable-analyse-container table{
+    color: #eee;
+}
+
+.comptable-analyse-container table tbody tr:hover{
+    background-color: #FC4445;
+    cursor: pointer;
+}
+
+.comptable-analyse-container fieldset{
+    border: .1rem solid #eee;
+    border-radius: .5rem;
+    padding: 2rem;
+}
+
+.comptable-analyse-container legend{
+    color: #eee;
+    font-family: "montserratBold";
+    font-size: 1rem;
+}
+
+.show-analyse{
+    position: relative;
+    top: 1rem;
+    border: .1rem solid #eee;
+    border-radius: .5rem;
+    height: 40vh;
+    overflow: scroll;
+}
+
+/* convention part */
+.comptable-convention-container table{
+    color: #eee;
+}
+
+.comptable-convention-container table tbody tr:hover{
+    background-color: #FC4445;
+    cursor: pointer;
+}
+
+.comptable-convention-container fieldset{
+    border: .1rem solid #eee;
+    border-radius: .5rem;
+    padding: 2rem;
+}
+
+.comptable-convention-container legend{
+    color: #eee;
+    font-family: "montserratBold";
+    font-size: 1rem;
+}
+
+.show-convention{
+    position: relative;
+    top: 1rem;
+    border: .1rem solid #eee;
+    border-radius: .5rem;
+    height: 30vh;
+    overflow: scroll;
+}
+
+#analyse-search-form{
+    margin: 1rem;
+    margin-top: 2rem;
+}
+
+#convention-search-form{
+    margin: 1rem;
+    margin-top: 2rem;
+}
