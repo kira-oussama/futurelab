@@ -139,6 +139,16 @@ body{
     color: #005ba5;
 }
 
+.factureBtn{
+    font-family: 'MontserratBold';
+    color: #007ee5;
+    cursor: pointer;
+}
+
+.factureBtn:hover{
+    color: #005ba5;
+}
+
 /* Ajouter partient (secretaire) */
 
 .add-patient-form{
@@ -150,7 +160,19 @@ body{
     color: #eee;
 }
 
+/* demander une analyse */
 
+.demande-analyse{
+    padding: 1rem;
+}
+
+.convention-patient-add{
+    padding: 1rem;
+}
+
+.voireBtn{
+    color: #191919;
+}
 
 /* Comptable Section */
 
@@ -231,4 +253,80 @@ body{
 #convention-search-form{
     margin: 1rem;
     margin-top: 2rem;
+}
+
+/* laboratin section */
+.laboratin-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+
+}
+
+.laboratin-container form{
+    display: flex;
+    flex-direction: row;
+}
+
+.labtab{
+    overflow-y: scroll;
+}
+
+.search-input{
+    width: 100%;
+}
+
+.search-btn{
+    width: 20%;
+}
+
+#lab-search{
+    width: 90%;
+}
+
+#laboratin-table{
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
+#laboratin-table tr{
+    color: #191919;
+}
+
+.resultBtn{
+    color: #007ee5;
+    cursor: pointer;
+}
+
+.resultBtn:hover{
+    color: #005296;
+}
+
+.result-lab-container{
+    padding: 1rem;
+}
+
+#deconnect-lab{
+    position: absolute;
+    bottom: 1rem;
+    left: 1rem;
+}
+
+/* specialiste section */
+
+.resultat-container{
+    color: #eee;
+    padding: 1rem;
+}
+
+.remark-field{
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: .5rem;
+    margin-bottom: .5rem;
+}
+
+#getTypeData{
+    margin-bottom: 1rem;
 }

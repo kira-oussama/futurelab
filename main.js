@@ -2,6 +2,7 @@
 const { BrowserWindow, Notification, dialog} = require('electron');
 const path = require('path');
 const {getConnection} = require('./database');
+const { type } = require('os');
 
 
 // login All users
@@ -16,10 +17,6 @@ const loginUser = (user)=>{
       switch (res[0].grade) {
         case "sec":
           window.loadFile('src/pages/secretaire/secretaire.html');
-          return new Notification({
-            title: "Vous êtes connecté",
-            body: "Bienvenue au FutureLab"
-          });
           break;
 
         case "com":
@@ -41,12 +38,7 @@ const loginUser = (user)=>{
 
 
     }else{
-
-      new Notification({
-        title: "Vous n'êtes pas connecté",
-        body: "vos informations d'identification sont erronées"
-      })
-      console.log("wrong credentials")
+      dialog.showMessageBox({type: "error", message: "vos informations d'identification sont erronées"});
     }
     
   });
@@ -76,6 +68,7 @@ const createNewWindow = (height, width, location)=>{
   });
 
   addPatientWindow.loadFile(location);
+  addPatientWindow.setMenuBarVisibility(false);
   addPatientWindow.setResizable(false);
 }
 
@@ -83,13 +76,10 @@ const addPatient = patient=>{
   const conn = getConnection();
   conn.query("INSERT INTO patients(nom, prenom, sexe, dn, numero) VALUES(?,?,?,?,?)",[patient.nom, patient.prenom, patient.sexe, patient.bday, patient.phone], (err, result)=>{
     if (err) throw err;
-    
 
-    new Notification({
-      title: "Patient Inséré",
-      body: "votre patient est inséré dans la base de données"
-    });
-
+    if(result.affectedRows === 1){
+      dialog.showMessageBox({type: "info", message: "votre patient est inséré dans la base de données"})
+    }
   });
 }
 
@@ -98,11 +88,9 @@ const modifyPatient = (id, patient)=>{
   conn.query("UPDATE patients SET nom=?, prenom=?, sexe=?, dn=?, numero=? WHERE patientId=?",[patient.nom, patient.prenom, patient.sexe, patient.bday, patient.phone, patient.id], (err, result)=>{
     if (err) throw err;
     
-
-    new Notification({
-      title: "Patient modifié",
-      body: "votre patient est modifié dans la base de données"
-    });
+    if(result.affectedRows === 1){
+      dialog.showMessageBox({type: "info", message: "votre patient est modifié dans la base de données"});
+    }
 
   });
 }
@@ -112,18 +100,20 @@ const deletePatient = id=>{
   conn.query("DELETE FROM patients WHERE patientId=?",[id],(err, result)=>{
     if(err) throw err;
 
-    new Notification({
-      title: "Patient supprimé",
-      body: "votre patient est supprimé dans la base de données"
-    });
-  })
+    if(result.affectedRows === 1){
+      dialog.showMessageBox({type: "info", message: "votre patient est supprimé dans la base de données"});
+    }else{
+      dialog.showMessageBox({type: "error", message: "votre patient n'est pas supprimé dans la base de données"});
+    }
+    
+  });
 }
 
 const getAllPatients = async ()=>{
   const conn = getConnection();
   var patients = [];
   
-  await conn.query("SELECT * FROM patients", (err, result)=>{
+  await conn.query("SELECT p.*, a.analyseId FROM patients p, analyses_patients ap, analyses a WHERE a.analyseId = ap.analyseId AND p.patientId = ap.patientId", (err, result)=>{
     if (err) throw err;
     
     patients.push(result);
@@ -155,7 +145,39 @@ const getPatientsByName = async (name)=>{
   return patients;
 }
 
+const demanderAnalyse = (pid, aid)=>{
+  const conn = getConnection();
+  conn.query("INSERT INTO analyses_patients (patientId, analyseId) VALUES (?, ?)", [pid,aid], (err, result)=>{
+    if (err) throw err;
 
+    if(result.affectedRows===1){
+      dialog.showMessageBox({type: "info", message: "l'analyse a été demandé"});
+    }
+  });
+}
+
+const AjouterConvention = (pid, societe)=>{
+  const conn = getConnection();
+  conn.query("UPDATE patients SET societe=? WHERE patientId=?", [societe, pid], (err, result)=>{
+    if (err) throw err;
+
+    if(result.affectedRows === 1){
+      dialog.showMessageBox({type: "info", message: "la convention a été ajouté"});
+    }
+
+  });
+}
+
+const getFacture = async (pid)=>{
+  const conn = getConnection();
+  var facture = [];
+  await conn.query("SELECT a.nom as anom, a.prix, p.nom, p.prenom, ap.payed,ap.demande_date FROM patients p, analyses a, analyses_patients ap WHERE a.analyseId = ap.analyseId AND p.patientId = ap.patientId AND p.patientId=?",[pid],(err, result)=>{
+    if (err) throw err;
+
+    facture.push(result);
+  });
+  return facture;
+}
 
 // comptable functions
 const addAnalyse = (nom, prix)=>{
@@ -163,11 +185,9 @@ const addAnalyse = (nom, prix)=>{
   conn.query("INSERT INTO analyses(nom, prix) values (?, ?)",[nom, prix], (err, result)=>{
     if (err) throw err;
 
-    new Notification({ 
-          title: "L\'analyse a été ajouté",
-          body: "L\'analyse a été ajouté a la base de donné"
-    });
-
+    if(result.affectedRows === 1){
+      dialog.showMessageBox({type: "info", message: "l'analyse a été ajouté"});
+    }
   });
 }
 
@@ -176,10 +196,7 @@ const addConvention = (societe, pourcentage, type)=>{
   conn.query("INSERT INTO conventions(societe, pourcentage, type) values (?, ?, ?)",[societe, pourcentage, type], (err, result)=>{
     if (err) throw err;
 
-    new Notification({ 
-          title: "L\'analyse a été ajouté",
-          body: "L\'analyse a été ajouté a la base de donné"
-    });
+    dialog.showMessageBox({type: "info", message: "la convention a été ajouté"});
 
   });
 }
@@ -256,6 +273,136 @@ const getConvention = async societe=>{
   return conventions;
 }
 
+
+// Laboratin functions
+const getDemendedAnalyses = async ()=>{
+
+  const conn = getConnection();
+  var orders = [];
+  await conn.query("SELECT a.analyseId, a.nom as analyse, p.patientId, p.nom, p.prenom FROM analyses_patients ap, analyses a, patients p WHERE p.patientId = ap.patientId AND ap.analyseId = a.analyseId AND ap.validated = 0 AND ap.waiting = 0",(err, result)=>{
+    if (err) throw err;
+
+    orders.push(result);
+  });
+
+  return orders;
+}
+
+const addResult = (pid, resultname, resultat, unite, normes, anteriorité)=>{
+  const conn = getConnection();
+  conn.query("INSERT INTO resultats (resultId, patientId, edition_date, remarque) VALUES (NULL, ?, CURRENT_TIMESTAMP, NULL)", [pid], (err, result)=>{
+    if (err) throw err;
+
+    
+    conn.query("INSERT INTO typesresultats(typeId, resultId, resultname, resultat, Unité, normes, Antériorité) VALUES (NULL, ?, ?, ?, ?, ?, ?)",[result.insertId, resultname, resultat, unite, normes, anteriorité], (err, res)=>{
+      if(err) throw err;
+
+      if(res.affectedRows === 1 ){
+        dialog.showMessageBox({type: "info", message: "la resultat a été ajouté"});
+      }
+    });
+  });
+}
+
+const finishTask = analyseId=>{
+  const conn = getConnection();
+  conn.query("UPDATE analyses_patients SET waiting = 1 WHERE analyses_patients.analyseId = ? ", [analyseId], (err, result)=>{
+    if (err) throw err;
+  });
+}
+
+const searchByName = async name=>{
+  const conn = getConnection();
+  var orders = [];
+  await conn.query("SELECT a.analyseId, a.nom as analyse, p.patientId, p.nom, p.prenom FROM analyses_patients ap, analyses a, patients p WHERE p.patientId = ap.patientId AND ap.analyseId = a.analyseId AND ap.validated = 0 AND p.nom = ?", [name],(err, result)=>{
+    if (err) throw err;
+    orders.push(result);
+  });
+  return orders;
+}
+
+// medecin funcations
+const getWaitingAnalyses = async ()=>{
+
+  const conn = getConnection();
+  var orders = [];
+  await conn.query("SELECT a.analyseId, a.nom as analyse, p.patientId, p.nom, p.prenom FROM analyses_patients ap, analyses a, patients p WHERE p.patientId = ap.patientId AND ap.analyseId = a.analyseId AND ap.validated = 0 AND ap.waiting = 1",(err, result)=>{
+    if (err) throw err;
+
+    orders.push(result);
+  });
+
+  return orders;
+}
+
+const validateTask = analyseId=>{
+  const conn = getConnection();
+  conn.query("UPDATE analyses_patients SET validated = 1 WHERE analyses_patients.analyseId = ? ", [analyseId], (err, result)=>{
+    if (err) throw err;
+  });
+}
+
+const showResults = async pid=>{
+  const conn = getConnection();
+  var results = [];
+  await conn.query("SELECT * FROM patients p, resultats r, typesresultats tr WHERE p.patientId = r.patientId AND r.resultId = tr.resultId AND p.patientId = ?", [pid], (err, result)=>{
+    if (err) throw err;
+
+    results.push(result);
+  });
+  return results;
+}
+
+const addRemark = (resultId, remark)=>{
+  const conn = getConnection();
+  conn.query("UPDATE resultats SET remarque = ? WHERE resultId = ? ", [remark, resultId], (err, result)=>{
+    if (err) throw err;
+
+    if(result.affectedRows === 1 ){
+      dialog.showMessageBox({type: "info", message: "la remarque a été ajouté"});
+    }
+
+  });
+}
+
+const getType = async (resultId)=>{
+  const conn = getConnection();
+  var results = [];
+
+  await conn.query("SELECT * FROM typesresultats", (err, result)=>{
+    if (err) throw err;
+
+    results.push(result);
+  });
+
+  return results;
+}
+
+const updateType = (resultname, resultat, unite, normes, anteriorité, tid)=>{
+  const conn = getConnection();
+  conn.query("UPDATE typesresultats SET resultname = ?, resultat = ?, Unité = ?, normes = ?, Antériorité = ? WHERE typeId = 4 ", [resultname, resultat, unite, normes, anteriorité, tid], (err, result)=>{
+    if(err) throw err;
+
+    if(result.affectedRows === 1 ){
+      dialog.showMessageBox({type: "info", message: "le type a été modifié"});
+    }
+
+  });
+}
+
+const searchWaittingAnalyses = async (name)=>{
+  const conn = getConnection();
+  var orders = [];
+  await conn.query("SELECT a.analyseId, a.nom as analyse, p.patientId, p.nom, p.prenom FROM analyses_patients ap, analyses a, patients p WHERE p.patientId = ap.patientId AND ap.analyseId = a.analyseId AND ap.validated = 0 AND ap.waiting = 1 AND p.nom = ?",[name],(err, result)=>{
+    if (err) throw err;
+
+    orders.push(result);
+  });
+
+  return orders;
+}
+
+
 function createWindow () {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
@@ -278,6 +425,7 @@ function createWindow () {
   // mainWindow.webContents.openDevTools()
 }
 
+
 module.exports = {
 createWindow,
 loginUser,
@@ -289,6 +437,8 @@ getPatient,
 modifyPatient,
 deletePatient,
 getPatientsByName,
+demanderAnalyse,
+AjouterConvention,
 // comptable functions
 addAnalyse,
 addConvention,
@@ -297,6 +447,20 @@ getAllconventions,
 confirmDelete,
 getAnalyse,
 getConvention,
+// laboratin functions
+getDemendedAnalyses,
+addResult,
+searchByName,
+finishTask,
+// medecin functions
+getWaitingAnalyses,
+validateTask,
+showResults,
+addRemark,
+getType,
+updateType,
+searchWaittingAnalyses,
+getFacture,
 
 closeWindow,
 test

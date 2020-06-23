@@ -148,3 +148,7 @@ const deleteConvention = async id=>{
     await main.confirmDelete("DELETE FROM conventions WHERE societe = ?", id);
     location.reload();
 }
+
+document.getElementById("deconnect").addEventListener("click", ()=>{
+    location.href = "../index.html";
+});

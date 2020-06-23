@@ -2,9 +2,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>laboratin</title>
+    <link rel="stylesheet" href="../../styles/bootstrap.min.css" />
+    <link rel="stylesheet" href="../../styles/mainStyle.css" />
+    <link rel="stylesheet" href="../../icons/css/all.min.css" />
+    <title>Laboratin</title>
 </head>
 <body>
-    <h1>Bonjour laboratin</h1>
+    <hr />
+    <h1 id="pagetitle">Laboratin</h1>
+    <hr />
+
+    <div class="laboratin-container">
+
+        <form id="search-form">
+            <div class="form-group search-input">
+              <input type="text" class="form-control" id="lab-search" placeholder="Entrez le nom du patient...">
+            </div>
+            <div class="form-group search-btn">
+                <button type="submit" class="btn btn-primary form-control"><i class="fa fa-search" aria-hidden="true"></i></button>
+            </div>
+        </form>
+        
+        <div class="labtab">
+            <table id="laboratin-table" class="table">
+                <thead>
+                    <tr>
+                        <th>Analyse</th>
+                        <th>Patient</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+    <button class="btn btn-danger" id="deconnect-lab"><i class="fas fa-door-closed"></i> Déconexion</button>
+
+    <script src="../../scripts/laboratin/laboratin.js"></script>
 </body>
 </html>

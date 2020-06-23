@@ -40,3 +40,11 @@ document.getElementById("delete-patient").addEventListener("click", ()=>{
     main.deletePatient(id);
     main.closeWindow();
 });
+
+document.getElementById("demande-analyse").addEventListener("click", ()=>{
+    main.createNewWindow(200, 480, 'src/pages/secretaire/demenderAnalyse.html');
+});
+
+document.getElementById("ajouter-convention").addEventListener("click", ()=>{
+    main.createNewWindow(200, 480, 'src/pages/secretaire/ajouterConvention.html');
+});

@@ -1,0 +1,39 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../styles/bootstrap.min.css" />
+    <link rel="stylesheet" href="../../styles/mainStyle.css" />
+    <link rel="stylesheet" href="../../icons/css/all.min.css" />
+    <title>Laboratin</title>
+</head>
+<body>
+    
+    <div class="resultat-container">
+        <p id="patientId"></p>
+        <p id="nom"></p>
+        <p id="prenom"></p>
+        <p id="sexe"></p>
+        <p id="dn"></p>
+        <p id="numero"></p>
+
+        <div class="types-result" id="tables-types-container">
+
+        </div>
+
+        <div class="remark-field">
+            <p>Remarque :</p>
+            <p id="remark"></p>
+        </div>
+        
+        <form id="med-add-remark">
+            <div class="form-group">
+              <input type="text" class="form-control" id="remark-input" placeholder="Ajouter la remarque">
+            </div>
+            <button type="submit" class="btn btn-primary"><i class="fas fa-plus" aria-hidden="true"> Ajouter</i></button>
+        </form>
+    </div>
+
+    <script src="../../scripts/specialiste/resultViewer.js"></script>
+</body>
+</html>
