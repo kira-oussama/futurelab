@@ -4,7 +4,7 @@ const conn = mysql.createConnection({
     host: "localhost",
     user: "root",
     password: "",
-    database: "FutureLab",
+    database: "futurelab",
     port: 3308
 });
 

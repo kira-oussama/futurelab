@@ -365,11 +365,11 @@ const addRemark = (resultId, remark)=>{
   });
 }
 
-const getType = async (resultId)=>{
+const getType = async (tid)=>{
   const conn = getConnection();
   var results = [];
 
-  await conn.query("SELECT * FROM typesresultats", (err, result)=>{
+  await conn.query("SELECT * FROM typesresultats WHERE typeId=?",[tid], (err, result)=>{
     if (err) throw err;
 
     results.push(result);
@@ -380,7 +380,7 @@ const getType = async (resultId)=>{
 
 const updateType = (resultname, resultat, unite, normes, anteriorité, tid)=>{
   const conn = getConnection();
-  conn.query("UPDATE typesresultats SET resultname = ?, resultat = ?, Unité = ?, normes = ?, Antériorité = ? WHERE typeId = 4 ", [resultname, resultat, unite, normes, anteriorité, tid], (err, result)=>{
+  conn.query("UPDATE typesresultats SET resultname = ?, resultat = ?, Unité = ?, normes = ?, Antériorité = ? WHERE typeId = ?", [resultname, resultat, unite, normes, anteriorité, tid], (err, result)=>{
     if(err) throw err;
 
     if(result.affectedRows === 1 ){
