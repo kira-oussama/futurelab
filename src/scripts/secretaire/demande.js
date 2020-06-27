@@ -1,9 +1,12 @@
 const {remote} = require('electron');
 const main = remote.require("./main");
+const jsPDF = require("jspdf");
 
 window.addEventListener("load", async e => {
     let analyses = await main.getAllanalyses();
+    let colors = await main.getAllColors();
     let select = document.getElementById("demande-analyse-select");
+    let colorSelect = document.getElementById("demande-analyse-color-select");
     
     for(let i=0; i < analyses[0].length ; i++){
         let option = document.createElement("option");
@@ -12,15 +15,45 @@ window.addEventListener("load", async e => {
         select.appendChild(option);
     }
 
+    for(let j=0; j< colors[0].length ; j++){
+        let option = document.createElement("option");
+        option.value = colors[0][j].colorId;
+        option.innerHTML = colors[0][j].color;
+        colorSelect.appendChild(option);
+    }
+
 });
 
 
-document.getElementById("demande-analyse-form").addEventListener("submit", e=>{
+document.getElementById("demande-analyse-form").addEventListener("submit", async e=>{
     e.preventDefault();
-    let aid = document.getElementById('demande-analyse-select').value;
+
+    let cid =  document.getElementById("demande-analyse-color-select").value;
+    let aid =  document.getElementById('demande-analyse-select').value;
     let pid = JSON.parse(localStorage.getItem("patient"));
     pid = pid.patientId;
+    let number = document.getElementById("color-number").value;
+    const patient = await main.getPatient(pid);
+    const clr = await main.getColorById(cid);
 
-    main.demanderAnalyse(pid, aid);
-    main.closeWindow();
+    var tickets = new jsPDF();
+
+    let spacing = 10;
+    for(let i= 0; i< number ; i++){
+        tickets.setTextColor("#000");
+        tickets.setFontSize(10);
+        tickets.text(`N ${patient[0][0].patientId}` , 10, spacing);
+        spacing += 5;
+        tickets.text(`Nom ${patient[0][0].nom}` , 10, spacing);
+        spacing += 5;
+        tickets.text(`Prénom ${patient[0][0].prenom}` , 10, spacing);
+        spacing += 5;
+        tickets.text(`couleur ${clr[0][0].color}` , 10, spacing);
+        spacing += 10;
+    }
+
+    tickets.save(`tecket.pdf`);
+
+    main.demanderAnalyse(pid, aid, cid);
+    // main.closeWindow();
 });

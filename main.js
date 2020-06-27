@@ -113,8 +113,9 @@ const getAllPatients = async ()=>{
   const conn = getConnection();
   var patients = [];
   
-  await conn.query("SELECT p.*, a.analyseId FROM patients p, analyses_patients ap, analyses a WHERE a.analyseId = ap.analyseId AND p.patientId = ap.patientId", (err, result)=>{
-    if (err) throw err;
+  // await conn.query("SELECT p.*, a.analyseId FROM patients p, analyses_patients ap, analyses a WHERE a.analyseId = ap.analyseId AND p.patientId = ap.patientId", (err, result)=>{
+  await conn.query("SELECT * FROM patients", (err, result)=>{
+  if (err) throw err;
     
     patients.push(result);
   });
@@ -145,9 +146,9 @@ const getPatientsByName = async (name)=>{
   return patients;
 }
 
-const demanderAnalyse = (pid, aid)=>{
+const demanderAnalyse = (pid, aid, cid)=>{
   const conn = getConnection();
-  conn.query("INSERT INTO analyses_patients (patientId, analyseId) VALUES (?, ?)", [pid,aid], (err, result)=>{
+  conn.query("INSERT INTO analyses_patients (patientId, analyseId, colorId) VALUES (?, ?, ?)", [pid, aid, cid], (err, result)=>{
     if (err) throw err;
 
     if(result.affectedRows===1){
@@ -171,12 +172,48 @@ const AjouterConvention = (pid, societe)=>{
 const getFacture = async (pid)=>{
   const conn = getConnection();
   var facture = [];
-  await conn.query("SELECT a.nom as anom, a.prix, p.nom, p.prenom, ap.payed,ap.demande_date FROM patients p, analyses a, analyses_patients ap WHERE a.analyseId = ap.analyseId AND p.patientId = ap.patientId AND p.patientId=?",[pid],(err, result)=>{
+  await conn.query("SELECT a.nom as anom, a.prix, p.* FROM patients p, analyses a, analyses_patients ap WHERE a.analyseId = ap.analyseId AND p.patientId = ap.patientId AND p.patientId=?",[pid],(err, result)=>{
     if (err) throw err;
 
     facture.push(result);
   });
   return facture;
+}
+
+const getAllColors = async ()=>{
+  const conn = getConnection();
+  var colors = [];
+  await conn.query("SELECT * FROM colors", (err, result)=>{
+    if(err) throw err;
+
+    colors.push(result);
+  });
+
+  return colors;
+}
+
+const checkConvention = async (pid)=>{
+  const conn = getConnection();
+  var results = [];
+  await conn.query("SELECT * FROM conventions WHERE societe=?",[pid], (err, result)=>{
+    if(err) throw err; 
+
+    results.push(result);
+  });
+
+  return results;
+}
+
+const getColorById = async cid =>{
+  const conn = getConnection();
+  let color = []
+  conn.query("select color from colors where colorId=? ",[cid], (err, result)=>{
+    if(err) throw err;
+
+    color.push(result);
+  });
+
+  return color;
 }
 
 // comptable functions
@@ -439,6 +476,10 @@ deletePatient,
 getPatientsByName,
 demanderAnalyse,
 AjouterConvention,
+getAllColors,
+getFacture,
+checkConvention,
+getColorById,
 // comptable functions
 addAnalyse,
 addConvention,
@@ -460,7 +501,6 @@ addRemark,
 getType,
 updateType,
 searchWaittingAnalyses,
-getFacture,
 
 closeWindow,
 test

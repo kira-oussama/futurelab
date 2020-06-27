@@ -56,6 +56,7 @@ window.addEventListener("load" , async () => {
 
 const consulterPatient = async (id)=>{
    var patient = await main.getPatient(id);
+   console.log(patient[0][0].societe)
    var patientInfo = {
        patientId: patient[0][0].patientId,
        nom: patient[0][0].nom,
@@ -71,6 +72,8 @@ const consulterPatient = async (id)=>{
 const showFacture = async id=>{
     console.log(id)
     let facture = await main.getFacture(id);
+    let convention = await main.checkConvention(facture[0][0].societe);
+    
     const fact = new jsPDF({
         orientation: "landscape",
         format: [250, 200]
@@ -83,7 +86,29 @@ const showFacture = async id=>{
     fact.text(`Nom ${facture[0][0].nom}` , 10, 20);
     fact.text(`Prenom ${facture[0][0].prenom}` , 10, 25);
     fact.text(`Analyse ${facture[0][0].anom}` , 10, 30);
-    fact.text(`Prix ${facture[0][0].prix} DA` , 10, 35);
+    if(facture[0][0].societe != null){
+        let prix_finale = 0;
+
+        if(convention[0][0].type === 'total'){
+            for(let i=0; i< facture[0].length; i++){
+                prix_finale += facture[0][i].prix;
+            }
+            prix_finale = (prix_finale*convention[0][0].pourcentage) / 100;
+        }else{
+            for(let i=0; i< facture[0].length; i++){
+                prix_finale += (facture[0][i].prix*convention[0][0].pourcentage) / 100
+            }
+        }
+
+        fact.text(`Prix ${prix_finale} DA` , 10, 35);
+    }else{
+        let prix_finale = 0;
+        for(let i=0; i< facture[0].length; i++){
+            prix_finale += facture[0][i].prix;
+        }
+
+        fact.text(`Prix ${prix_finale} DA` , 10, 35);
+    }
     fact.setTextColor(0,255,0);
     if(facture[0][0].payed === 0){
         fact.text(`payé` , 10, 40);

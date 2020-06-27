@@ -1,14 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 4.9.2
+-- version 5.0.2
 -- https://www.phpmyadmin.net/
 --
--- Hôte : 127.0.0.1:3308
--- Généré le :  lun. 22 juin 2020 à 22:04
--- Version du serveur :  8.0.18
--- Version de PHP :  7.4.0
+-- Host: localhost
+-- Generation Time: Jun 28, 2020 at 12:12 AM
+-- Server version: 10.4.13-MariaDB
+-- PHP Version: 7.4.7
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -19,25 +18,23 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de données :  `futurelab`
+-- Database: `futurelab`
 --
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `analyses`
+-- Table structure for table `analyses`
 --
 
-DROP TABLE IF EXISTS `analyses`;
-CREATE TABLE IF NOT EXISTS `analyses` (
-  `analyseId` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `analyses` (
+  `analyseId` int(11) NOT NULL,
   `nom` varchar(50) COLLATE utf8_bin NOT NULL,
-  `prix` float NOT NULL,
-  PRIMARY KEY (`analyseId`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+  `prix` float NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
--- Déchargement des données de la table `analyses`
+-- Dumping data for table `analyses`
 --
 
 INSERT INTO `analyses` (`analyseId`, `nom`, `prix`) VALUES
@@ -48,148 +45,155 @@ INSERT INTO `analyses` (`analyseId`, `nom`, `prix`) VALUES
 -- --------------------------------------------------------
 
 --
--- Structure de la table `analyses_patients`
+-- Table structure for table `analyses_patients`
 --
 
-DROP TABLE IF EXISTS `analyses_patients`;
-CREATE TABLE IF NOT EXISTS `analyses_patients` (
+CREATE TABLE `analyses_patients` (
+  `apId` int(11) NOT NULL,
   `analyseId` int(11) NOT NULL,
   `patientId` int(11) NOT NULL,
-  `payed` tinyint(1) NOT NULL DEFAULT '0',
-  `demande_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `validated` tinyint(1) NOT NULL DEFAULT '0',
-  `waiting` tinyint(1) NOT NULL DEFAULT '0',
-  UNIQUE KEY `analyseId` (`analyseId`),
-  UNIQUE KEY `patientId` (`patientId`)
+  `colorId` int(5) NOT NULL,
+  `payed` tinyint(1) NOT NULL DEFAULT 0,
+  `demande_date` timestamp NOT NULL DEFAULT current_timestamp(),
+  `validated` tinyint(1) NOT NULL DEFAULT 0,
+  `waiting` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
--- Déchargement des données de la table `analyses_patients`
+-- Dumping data for table `analyses_patients`
 --
 
-INSERT INTO `analyses_patients` (`analyseId`, `patientId`, `payed`, `demande_date`, `validated`, `waiting`) VALUES
-(1, 22, 0, '2020-06-21 16:53:39', 0, 1),
-(8, 23, 0, '2020-06-21 16:53:54', 0, 0);
+INSERT INTO `analyses_patients` (`apId`, `analyseId`, `patientId`, `colorId`, `payed`, `demande_date`, `validated`, `waiting`) VALUES
+(1, 1, 25, 1, 0, '2020-06-26 15:20:13', 1, 1),
+(2, 7, 23, 1, 0, '2020-06-26 15:13:58', 1, 1),
+(4, 1, 23, 3, 0, '2020-06-26 15:29:28', 1, 1),
+(9, 1, 27, 1, 0, '2020-06-27 22:10:58', 0, 0);
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `conventions`
+-- Table structure for table `colors`
 --
 
-DROP TABLE IF EXISTS `conventions`;
-CREATE TABLE IF NOT EXISTS `conventions` (
+CREATE TABLE `colors` (
+  `colorId` int(11) NOT NULL,
+  `color` varchar(80) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `colors`
+--
+
+INSERT INTO `colors` (`colorId`, `color`) VALUES
+(1, 'blue'),
+(2, 'green'),
+(3, 'red'),
+(4, 'yellow');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `conventions`
+--
+
+CREATE TABLE `conventions` (
   `societe` varchar(30) COLLATE utf8_bin NOT NULL,
   `pourcentage` int(3) NOT NULL,
-  `type` enum('total','partial') COLLATE utf8_bin NOT NULL,
-  PRIMARY KEY (`societe`)
+  `type` enum('total','partial') COLLATE utf8_bin NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
--- Déchargement des données de la table `conventions`
+-- Dumping data for table `conventions`
 --
 
 INSERT INTO `conventions` (`societe`, `pourcentage`, `type`) VALUES
-('cia', 50, 'total');
+('cia', 33, 'partial');
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `patients`
+-- Table structure for table `patients`
 --
 
-DROP TABLE IF EXISTS `patients`;
-CREATE TABLE IF NOT EXISTS `patients` (
-  `patientId` int(10) NOT NULL AUTO_INCREMENT,
-  `societe` varchar(30) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL,
+CREATE TABLE `patients` (
+  `patientId` int(10) NOT NULL,
+  `societe` varchar(30) COLLATE utf8_bin DEFAULT NULL,
   `nom` varchar(30) COLLATE utf8_bin NOT NULL,
   `prenom` varchar(30) COLLATE utf8_bin NOT NULL,
   `sexe` enum('male','female') COLLATE utf8_bin NOT NULL,
   `dn` date NOT NULL,
-  `numero` varchar(10) COLLATE utf8_bin NOT NULL,
-  PRIMARY KEY (`patientId`),
-  KEY `convention_patientfk` (`societe`)
-) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+  `numero` varchar(10) COLLATE utf8_bin NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
--- Déchargement des données de la table `patients`
+-- Dumping data for table `patients`
 --
 
 INSERT INTO `patients` (`patientId`, `societe`, `nom`, `prenom`, `sexe`, `dn`, `numero`) VALUES
-(22, NULL, 'amri', 'oussama', 'male', '1999-10-29', '0554226805'),
-(23, NULL, 'amri', 'abdelkrim', 'male', '1999-10-29', '0554226805');
+(23, 'cia', 'amri', 'abdelkrim', 'male', '1999-10-29', '0554226805'),
+(25, NULL, 'hero', 'hamada', 'male', '1999-02-09', '0546484984'),
+(27, NULL, 'omar ', 'dine', 'male', '1999-11-25', '0554784456');
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `resultats`
+-- Table structure for table `resultats`
 --
 
-DROP TABLE IF EXISTS `resultats`;
-CREATE TABLE IF NOT EXISTS `resultats` (
-  `resultId` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `resultats` (
+  `resultId` int(11) NOT NULL,
   `patientId` int(11) NOT NULL,
-  `edition_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `remarque` varchar(250) COLLATE utf8_bin DEFAULT NULL,
-  PRIMARY KEY (`resultId`),
-  KEY `patientId` (`patientId`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+  `edition_date` timestamp NOT NULL DEFAULT current_timestamp(),
+  `remarque` varchar(250) COLLATE utf8_bin DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
--- Déchargement des données de la table `resultats`
+-- Dumping data for table `resultats`
 --
 
 INSERT INTO `resultats` (`resultId`, `patientId`, `edition_date`, `remarque`) VALUES
-(5, 22, '2020-06-21 16:29:53', 'oh sorry you are going to die'),
-(6, 22, '2020-06-21 17:30:43', NULL),
-(7, 22, '2020-06-21 17:30:53', NULL);
+(11, 23, '2020-06-26 15:30:20', NULL),
+(12, 23, '2020-06-26 15:30:44', NULL);
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `typesresultats`
+-- Table structure for table `typesresultats`
 --
 
-DROP TABLE IF EXISTS `typesresultats`;
-CREATE TABLE IF NOT EXISTS `typesresultats` (
-  `typeId` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `typesresultats` (
+  `typeId` int(11) NOT NULL,
   `resultId` int(11) NOT NULL,
   `resultname` varchar(100) COLLATE utf8_bin NOT NULL,
   `resultat` float NOT NULL,
   `Unité` varchar(10) COLLATE utf8_bin NOT NULL,
   `normes` varchar(13) COLLATE utf8_bin NOT NULL,
-  `Antériorité` varchar(10) COLLATE utf8_bin NOT NULL,
-  PRIMARY KEY (`typeId`),
-  KEY `resultId` (`resultId`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+  `Antériorité` varchar(10) COLLATE utf8_bin NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
--- Déchargement des données de la table `typesresultats`
+-- Dumping data for table `typesresultats`
 --
 
 INSERT INTO `typesresultats` (`typeId`, `resultId`, `resultname`, `resultat`, `Unité`, `normes`, `Antériorité`) VALUES
-(4, 5, 'kech type okher', 77, 'kg/l', '55 - 80', 'kech 7aja'),
-(5, 6, '1', 11, 'df', 'dfd', 'dd'),
-(6, 7, '2', 77, 'dfk', 'fdd', 'dfk');
+(10, 11, 'test', 55, '55', '55', '55'),
+(11, 12, 'something', 66, '66', '66', '66');
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `users`
+-- Table structure for table `users`
 --
 
-DROP TABLE IF EXISTS `users`;
-CREATE TABLE IF NOT EXISTS `users` (
-  `userId` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `users` (
+  `userId` int(11) NOT NULL,
   `email` varchar(30) COLLATE utf8_bin NOT NULL,
   `password` varchar(30) COLLATE utf8_bin NOT NULL,
-  `grade` enum('sec','com','lab','med') COLLATE utf8_bin NOT NULL,
-  PRIMARY KEY (`userId`),
-  UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+  `grade` enum('sec','com','lab','med') COLLATE utf8_bin NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
--- Déchargement des données de la table `users`
+-- Dumping data for table `users`
 --
 
 INSERT INTO `users` (`userId`, `email`, `password`, `grade`) VALUES
@@ -199,30 +203,137 @@ INSERT INTO `users` (`userId`, `email`, `password`, `grade`) VALUES
 (4, 'med@gmail.com', 'med', 'med');
 
 --
--- Contraintes pour les tables déchargées
+-- Indexes for dumped tables
 --
 
 --
--- Contraintes pour la table `analyses_patients`
+-- Indexes for table `analyses`
+--
+ALTER TABLE `analyses`
+  ADD PRIMARY KEY (`analyseId`);
+
+--
+-- Indexes for table `analyses_patients`
+--
+ALTER TABLE `analyses_patients`
+  ADD PRIMARY KEY (`apId`),
+  ADD KEY `colorId` (`colorId`),
+  ADD KEY `analyseId` (`analyseId`) USING BTREE,
+  ADD KEY `patientId` (`patientId`) USING BTREE;
+
+--
+-- Indexes for table `colors`
+--
+ALTER TABLE `colors`
+  ADD PRIMARY KEY (`colorId`),
+  ADD UNIQUE KEY `tubecolor` (`color`);
+
+--
+-- Indexes for table `conventions`
+--
+ALTER TABLE `conventions`
+  ADD PRIMARY KEY (`societe`);
+
+--
+-- Indexes for table `patients`
+--
+ALTER TABLE `patients`
+  ADD PRIMARY KEY (`patientId`),
+  ADD KEY `convention_patientfk` (`societe`);
+
+--
+-- Indexes for table `resultats`
+--
+ALTER TABLE `resultats`
+  ADD PRIMARY KEY (`resultId`),
+  ADD KEY `patientId` (`patientId`);
+
+--
+-- Indexes for table `typesresultats`
+--
+ALTER TABLE `typesresultats`
+  ADD PRIMARY KEY (`typeId`),
+  ADD KEY `resultId` (`resultId`);
+
+--
+-- Indexes for table `users`
+--
+ALTER TABLE `users`
+  ADD PRIMARY KEY (`userId`),
+  ADD UNIQUE KEY `email` (`email`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `analyses`
+--
+ALTER TABLE `analyses`
+  MODIFY `analyseId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
+-- AUTO_INCREMENT for table `analyses_patients`
+--
+ALTER TABLE `analyses_patients`
+  MODIFY `apId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
+--
+-- AUTO_INCREMENT for table `colors`
+--
+ALTER TABLE `colors`
+  MODIFY `colorId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `patients`
+--
+ALTER TABLE `patients`
+  MODIFY `patientId` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+
+--
+-- AUTO_INCREMENT for table `resultats`
+--
+ALTER TABLE `resultats`
+  MODIFY `resultId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+
+--
+-- AUTO_INCREMENT for table `typesresultats`
+--
+ALTER TABLE `typesresultats`
+  MODIFY `typeId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+
+--
+-- AUTO_INCREMENT for table `users`
+--
+ALTER TABLE `users`
+  MODIFY `userId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `analyses_patients`
 --
 ALTER TABLE `analyses_patients`
   ADD CONSTRAINT `analysefk` FOREIGN KEY (`analyseId`) REFERENCES `analyses` (`analyseId`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `patientfk` FOREIGN KEY (`patientId`) REFERENCES `patients` (`patientId`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+  ADD CONSTRAINT `colorfk` FOREIGN KEY (`colorId`) REFERENCES `colors` (`colorId`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `patientfk` FOREIGN KEY (`patientId`) REFERENCES `patients` (`patientId`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Contraintes pour la table `patients`
+-- Constraints for table `patients`
 --
 ALTER TABLE `patients`
   ADD CONSTRAINT `convention_patientfk` FOREIGN KEY (`societe`) REFERENCES `conventions` (`societe`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Contraintes pour la table `resultats`
+-- Constraints for table `resultats`
 --
 ALTER TABLE `resultats`
   ADD CONSTRAINT `resultats_ibfk_1` FOREIGN KEY (`patientId`) REFERENCES `patients` (`patientId`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Contraintes pour la table `typesresultats`
+-- Constraints for table `typesresultats`
 --
 ALTER TABLE `typesresultats`
   ADD CONSTRAINT `typesresultats_ibfk_1` FOREIGN KEY (`resultId`) REFERENCES `resultats` (`resultId`) ON DELETE CASCADE ON UPDATE CASCADE;
