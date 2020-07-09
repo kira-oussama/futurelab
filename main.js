@@ -30,7 +30,11 @@ const loginUser = (user)=>{
         case "med":
           window.loadFile('src/pages/specialiste/specialiste.html');
           break;
-      
+
+        case "chef":
+            window.loadFile('src/pages/chef/chef.html');
+            break;
+        
         default:
           break;
 
@@ -112,7 +116,6 @@ const deletePatient = id=>{
 const getAllPatients = async ()=>{
   const conn = getConnection();
   var patients = [];
-  
   // await conn.query("SELECT p.*, a.analyseId FROM patients p, analyses_patients ap, analyses a WHERE a.analyseId = ap.analyseId AND p.patientId = ap.patientId", (err, result)=>{
   await conn.query("SELECT * FROM patients", (err, result)=>{
   if (err) throw err;
@@ -131,7 +134,6 @@ const getPatient = async (id) =>{
 
     patient.push(result);
   });
-
   return (patient);
 }
 
@@ -260,7 +262,6 @@ const getAllconventions = async ()=>{
     
     conventions.push(result);
   });
-
   return(conventions);
 }
 
@@ -463,10 +464,49 @@ function createWindow () {
 }
 
 
+// chef funcitons
+
+const addUser =user=>{
+  const conn = getConnection();
+  conn.query("INSERT INTO users(email, password, grade) VALUES(?,?,?)",[user.email, user.password, user.grade], (err, result)=>{
+    if (err) throw err;
+
+    if(result.affectedRows === 1){
+      dialog.showMessageBox({type: "info", message: "votre utilisateur est inséré dans la base de données"})
+    }
+  });
+  
+}
+const getAlldemendes = async ()=>{
+  const conn = getConnection();
+  var demandes = [];
+  
+  await conn.query("SELECT * FROM analyses_patients ORDER BY analyses_patients.demande_date DESC", (err, result)=>{
+    if (err) throw err;
+    
+    demandes.push(result);
+  });
+  return(demandes);
+}
+const analyseByID = async (id) =>{
+  const conn = getConnection();
+  var analyse = [];
+  await conn.query("SELECT * FROM analyses WHERE analyseId = ?",[id], (err, result)=>{
+    if (err) throw err;
+
+    analyse.push(result);
+  });
+  return (analyse);
+}
+
 module.exports = {
 createWindow,
 loginUser,
 createNewWindow,
+// chef funcitons
+addUser,
+getAlldemendes,
+analyseByID,
 // secretaire functions
 addPatient,
 getAllPatients,
@@ -501,6 +541,7 @@ addRemark,
 getType,
 updateType,
 searchWaittingAnalyses,
+
 
 closeWindow,
 test

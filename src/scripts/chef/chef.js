@@ -1,31 +1,42 @@
 const { remote } = require("electron");
 const main = remote.require("./main");
 
-
 window.addEventListener("load", async ()=>{
-    let analyses = await main.getAllanalyses();
     let conventions = await main.getAllconventions();
+    let demendes = await main.getAlldemendes();
+    let dem=document.getElementById('dem');
+    var d = new Date();
+    // get each demande info 
+    demendes[0].forEach(async element => {
+        let num_demande=element.apId;
+        let demande_date=element.demande_date;
+        if ((d.getFullYear()===demande_date.getFullYear())&&
+        (d.getMonth()===demande_date.getMonth())&&
+        (d.getDate()===demande_date.getDate())) {
+            //get name of patient
+            var patient = await main.getPatient(element.patientId);
+            var nom = (patient[0][0].nom);
+            var prenom = (patient[0][0].prenom);
+            // get nom of analyse
+            var analyse = await main.analyseByID(element.analyseId);
+            var analyseName=analyse[0][0].nom;
+            
+            //add html row
+           var html=`
+            <tr class="text-light">
+                <td>${num_demande}</td>
+                <td>${nom} ${prenom}</td>
+                <td>${analyseName}</td>
+                <td>Aujourd'hui à &nbsp; &nbsp; "${demande_date.getHours()}:${demande_date.getMinutes()}"</td>
+            </tr>
+            `;
+            dem.innerHTML += html;
+        }
+          
+        
+        
+    });
     
-    let analysesTable = document.getElementById("analyses-table").getElementsByTagName("tbody")[0];
-    for(let i=0; i< analyses[0].length ; i++){
-        let newRow = analysesTable.insertRow(i);
-        newRow.setAttribute('id', analyses[0][i].analyseId);
-        newRow.setAttribute('onClick', 'deleteAnalyse(this.id)');
-
-        //columns
-        let nomCol = newRow.insertCell(0);
-        let prixCol = newRow.insertCell(1);
-
-        //values
-        let nom = document.createTextNode(analyses[0][i].nom);
-        let prix = document.createTextNode(analyses[0][i].prix);
-        
-        //appending
-        nomCol.appendChild(nom);
-        prixCol.appendChild(prix);
-        
-    }
-
     let conventionsTable = document.getElementById("conventions-table").getElementsByTagName("tbody")[0];
     for(let i=0; i< conventions[0].length ; i++){
         let newRow = conventionsTable.insertRow(i);
@@ -50,17 +61,6 @@ window.addEventListener("load", async ()=>{
     }
 });
 
-document.getElementById("addAnalyseForm").addEventListener("submit", (e)=>{
-    e.preventDefault();
-
-    let name = document.getElementById("analyse-name").value;
-    let price = document.getElementById("analyse-price").value;
-
-    name = name.toLowerCase();
-    price = price.toLowerCase();
-    main.addAnalyse(name, price);
-    location.reload();
-});
 
 document.getElementById("addConvention").addEventListener("submit", e=>{
     e.preventDefault();
@@ -77,35 +77,6 @@ document.getElementById("addConvention").addEventListener("submit", e=>{
     location.reload();
 
 });
-
-document.getElementById("analyse-search-form").addEventListener("submit", async e=>{
-    e.preventDefault();
-
-    let searchValue = document.getElementById("analyse-search-input").value;
-
-    let analyses = await main.getAnalyse(searchValue);
-
-    let analysesTable = document.getElementById("analyses-table").getElementsByTagName("tbody")[0];
-    analysesTable.innerHTML = "";
-    for(let i=0; i< analyses[0].length ; i++){
-        let newRow = analysesTable.insertRow(i);
-        newRow.setAttribute('id', analyses[0][i].analyseId);
-        newRow.setAttribute('onClick', 'deleteAnalyse(this.id)');
-
-        //columns
-        let nomCol = newRow.insertCell(0);
-        let prixCol = newRow.insertCell(1);
-
-        //values
-        let nom = document.createTextNode(analyses[0][i].nom);
-        let prix = document.createTextNode(analyses[0][i].prix);
-        
-        //appending
-        nomCol.appendChild(nom);
-        prixCol.appendChild(prix); 
-    }
-});
-
 document.getElementById("convention-search-form").addEventListener("submit", async e=>{
     e.preventDefault();
 
@@ -136,19 +107,18 @@ document.getElementById("convention-search-form").addEventListener("submit", asy
         typeCol.appendChild(type);
         
     }
+    document.getElementById("convention-search-input").value="";
 
 });
 
-const deleteAnalyse = async id=>{
-    await main.confirmDelete("DELETE FROM analyses WHERE analyseId = ?", id);
-    location.reload();
-}
 
-const deleteConvention = async id=>{
-    await main.confirmDelete("DELETE FROM conventions WHERE societe = ?", id);
-    location.reload();
-}
+document.getElementById("add-user").addEventListener("click", ()=>{
+  main.createNewWindow(350, 480, 'src/pages/chef/adduser.html');
+});
+document.getElementById('patient').addEventListener("click", ()=>{
+    main.createNewWindow(500, 780, 'src/pages/chef/patient.html');
+});
 
-    document.getElementById("deconnect").addEventListener("click", ()=>{
-        location.href = "../index.html";
-    });
+document.getElementById("deconnect").addEventListener("click", ()=>{
+    location.href = "../index.html";
+});
