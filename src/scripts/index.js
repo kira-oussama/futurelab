@@ -14,7 +14,6 @@ document.querySelector("#loginForm").addEventListener("submit",async (e)=>{
     e.preventDefault();
     var email = document.getElementById("email").value;
     var password = document.getElementById("password").value;
-    
     await main.loginUser({
         email: email,
         password: password

@@ -2,7 +2,7 @@ const {remote} = require("electron");
 const main = remote.require("./main");
 
 window.addEventListener("load", async ()=>{
-
+    
     let demandes = await main.getDemendedAnalyses();
 
     let demandesTable = document.getElementById("laboratin-table").getElementsByTagName("tbody")[0];
@@ -12,7 +12,6 @@ window.addEventListener("load", async ()=>{
             pid: demandes[0][i].patientId
         }
         let newRow = demandesTable.insertRow(i);
-
         //columns
         let nomAnalyse = newRow.insertCell(0);
         let nomPatient = newRow.insertCell(1);
@@ -21,25 +20,25 @@ window.addEventListener("load", async ()=>{
 
         setResult.setAttribute("id", JSON.stringify(ids));
         setResult.setAttribute("onClick", "setResult(this.id)")
-        setResult.setAttribute("class", "resultBtn");
+        setResult.setAttribute("class", "result resultBtn");
 
         envoyer.setAttribute("id", JSON.stringify(ids));
-        envoyer.setAttribute("onClick", "envoyerVersMS(this.id)")
-        envoyer.setAttribute("class", "resultBtn");
-
-
+        envoyer.setAttribute("onClick", "valider(this.id)");
+        envoyer.setAttribute("class", "valider resultBtn");
+    
 
         //values
         let anom = document.createTextNode(demandes[0][i].analyse);
         let pnom = document.createTextNode(demandes[0][i].nom + " " + demandes[0][i].prenom);
         let res = document.createTextNode("Donner Resultat");
-        let env = document.createTextNode("Envoyer");
+        let env = document.createTextNode("Valider");
         
         //appending
         nomAnalyse.appendChild(anom);
         nomPatient.appendChild(pnom);
         setResult.appendChild(res);
-        envoyer.appendChild(env);
+        //envoyer.appendChild(env);
+        
         
     }
 
@@ -47,12 +46,13 @@ window.addEventListener("load", async ()=>{
 
 const setResult = id=>{
     localStorage.setItem("patient_analyse", id);
-    main.createNewWindow(400, 480, "src/pages/laboratin/resultForm.html");
+    main.createNewWindow(520, 480, "src/pages/laboratin/resultForm.html");
+    
 }
 
-const envoyerVersMS = id=>{
+const valider = id=>{
     let data = JSON.parse(id);
-    main.finishTask(data.aid);
+    main.validateTask(data.aid);
     location.reload();
 }
 
@@ -93,6 +93,11 @@ document.getElementById("search-form").addEventListener("submit", async e=>{
     }
     
 });
+
+document.getElementById("refresh-patients").addEventListener("click", ()=>{
+    location.reload();
+});
+
 
 document.getElementById("deconnect-lab").addEventListener("click", e=>{
     location.href = "../index.html";

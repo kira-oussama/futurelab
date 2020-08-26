@@ -1,0 +1,39 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../styles/bootstrap.min.css" />
+    <link rel="stylesheet" href="../../styles/mainStyle.css" />
+    <link rel="stylesheet" href="../../icons/css/all.min.css" />
+    <title>Ajouter Une Antenne</title>
+</head>
+<body>
+
+    <div class="add-patient-form">
+        <form id="add-entante-form-form">
+            <div class="form-group">
+              <label for="code"><i class="fas fa-barcode" aria-hidden="true"></i> &nbsp;  Code <span class="text-muted"> &nbsp; (unique)</span></label>
+              <input required type="text" maxlength="10" minlength="3"  class="form-control" id="code" placeholder="Entrez le code du Antenne..." />
+            </div>
+            <div class="form-group">
+                <label for="nom"><i class="fas fa-home" aria-hidden="true"></i> &nbsp;  Nom</label>
+                <input required type="text" maxlength="30" minlength="3"  class="form-control" id="nom" placeholder="Entrez le nom du Antenne..." />
+              </div>
+              <div class="form-group">
+                <label for="address"><i class="fas fa-map-marker" aria-hidden="true"></i> &nbsp;  Address</label>
+                <input required type="text" maxlength="30" minlength="3"  class="form-control" id="address" placeholder="Entrez la'address du Antenne..." />
+              </div>
+              <div class="form-group">
+                <label for="telephone"><i class="fas fa-phone" aria-hidden="true"></i> &nbsp; Telephone </label>
+                <input required type="text" pattern="[0-9]{10}"maxlength="10" minlength="3"  class="form-control" id="telephone" placeholder="Entrez le telephone du Antenne..." />
+              </div>
+    
+           
+            <button type="submit" class="btn btn-primary"><i class="fas fa-plus" aria-hidden="true"> Ajouter</i></button>
+    
+        </form>
+    </div>
+    
+    <script src="../../scripts/chef/addentante.js"></script>
+</body>
+</html>

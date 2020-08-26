@@ -188,10 +188,12 @@ body{
     color: #eee;
 }
 
+/*
 .comptable-analyse-container table tbody tr:hover{
     background-color: #FC4445;
     cursor: pointer;
 }
+*/
 
 .comptable-analyse-container fieldset{
     border: .1rem solid #eee;
@@ -353,6 +355,11 @@ body{
     border-radius: .5rem;
     height: 70vh;
     overflow: scroll;
+}
+.preleveur-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
 }
 /* width */
 ::-webkit-scrollbar {

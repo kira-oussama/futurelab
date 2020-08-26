@@ -1,0 +1,33 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../styles/bootstrap.min.css" />
+    <link rel="stylesheet" href="../../styles/mainStyle.css" />
+    <link rel="stylesheet" href="../../icons/css/all.min.css" />
+    <title>Demandes</title>
+</head>
+<body class="p-2">
+    <h3 class="text-light m-3 font-weight-bold">Imprimer la ticket</h3>
+    <div class="information font-weight-bold">
+        <b class="text-light pl-5">Nom :</b><span class="text-light ml-3" id="nomPatient"></span><br>
+        <b class="text-light pl-5">Prenom :</b><span class="text-light ml-3" id="prenomPatient"></span><br>
+        <b class="text-light pl-5">Analyse :</b><span class="text-light ml-3" id="nameAnalyse"></span><br>
+        <b class="text-light pl-5">Date :</b><span class="text-light ml-3" id="datePrlevment"></span><br>
+    </div>
+    
+    <form class="pl-5 mt-2">
+        <input type="hidden" name="nom" value="">
+        <input type="hidden" name="prnom" value="">
+        <input type="hidden" name="analyse" value="">
+        <input type="hidden" name="date" value="">
+        <b class="text-light">Couleur de ticket :</b>
+        <select class="custom-select custom-select-sm" name="color" ></select>
+        
+        <button class="btn btn-warning mt-2" type="submit"><i class="fas fa-print"></i></button>
+    </form>
+    
+
+    <script src="../../scripts/preleveur/print.js"></script>
+</body>
+</html>

@@ -2,22 +2,26 @@ const {remote} = require("electron");
 const main = remote.require("./main");
 const jsPDF = require("jspdf");
 
+var pid ;
 
 window.addEventListener("load", async ()=>{
     let data = await JSON.parse(localStorage.getItem("patient_analyse"));
+    pid = await data.pid;
     let patient = await JSON.parse(localStorage.getItem("patient"));
-    let pid = await data.pid;
+    
+    let patientget = await main.getPatient(pid);
+    
     let results = await main.showResults(pid);
-
+    
     // to get resultid
     localStorage.setItem("otherInfo", JSON.stringify(results[0][0]));
     
-    document.getElementById("patientId").innerHTML = "N " + patient.patientId;
-    document.getElementById("nom").innerHTML = "Nom : " + patient.nom;
-    document.getElementById("prenom").innerHTML ="Prénom : " + patient.prenom;
-    document.getElementById("sexe").innerHTML ="Sexe : " + patient.sexe;
-    document.getElementById("dn").innerHTML = "Date de naissance : " + patient.bday.toString().substring(0,10);
-    document.getElementById("numero").innerHTML = "Téléphone : " + patient.phone;
+    document.getElementById("patientId").innerHTML = "N " + patientget[0][0].patientId;
+    document.getElementById("nom").innerHTML = "Nom : " + patientget[0][0].nom;
+    document.getElementById("prenom").innerHTML ="Prénom : " + patientget[0][0].prenom;
+    document.getElementById("sexe").innerHTML ="Sexe : " + patientget[0][0].sexe;
+    document.getElementById("dn").innerHTML = "Date de naissance : " + patientget[0][0].dn.toString().substring(0,10);
+    document.getElementById("numero").innerHTML = "Téléphone : " + patientget[0][0].numero;
     
     // remark here
     document.getElementById("remark").innerHTML = results[0][0].remarque;
@@ -105,9 +109,13 @@ document.getElementById("med-add-remark").addEventListener("submit", (e)=>{
 
 
 document.getElementById("imprimer-fact").addEventListener("click", ()=>{
+   
     var result = new jsPDF();
     var source = document.getElementsByTagName("body")[0];
-
-    result.fromHTML(source,10,10);
-    result.save('test.pdf');
+     result.fromHTML(source,10,10);
+     result.save('test.pdf');
+    setTimeout(() => {
+        main.deletePatient(pid);
+        
+    }, 1000);
 });

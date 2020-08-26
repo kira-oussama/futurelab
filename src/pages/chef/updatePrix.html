@@ -1,0 +1,28 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../styles/bootstrap.min.css" />
+    <link rel="stylesheet" href="../../styles/mainStyle.css" />
+    <link rel="stylesheet" href="../../icons/css/all.min.css" />
+    <title>mètre a jour le prix</title>
+</head>
+<body>
+    <div class="comptable-analyse-container p-5">
+        <form id="addAnalyseForm">
+            
+                <legend>mètre a jour le prix d'une Analyse</legend>
+                <div class="form-group">
+                    <input type="text" class="form-control" id="analyse-name" readonly placeholder="Entrez le nom de l'analyse " required/>
+                  </div>
+                  <div class="form-group">
+                    <input type="number" class="form-control" id="analyse-price" min="0" placeholder="Entrez le prix de l'analyse " required/>
+                  </div>
+                  <button type="submit" class="btn btn-success"><i class="fas fa-wrench" aria-hidden="true"> mise à jour le prix </i></button>
+           
+        </form>
+    </div>
+    
+    <script src="../../scripts/chef/updatePrix.js"></script>
+</body>
+</html>
