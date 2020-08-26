@@ -5,11 +5,11 @@
     <link rel="stylesheet" href="../../styles/bootstrap.min.css" />
     <link rel="stylesheet" href="../../styles/mainStyle.css" />
     <link rel="stylesheet" href="../../icons/css/all.min.css" />
-    <title>Laboratin</title>
+    <title>specialiste</title>
 </head>
 <body>
     <hr />
-    <h1 id="pagetitle">Laboratin</h1>
+    <h1 id="pagetitle">specialiste</h1>
     <hr />
 
     <div class="laboratin-container">
@@ -22,7 +22,8 @@
                 <button type="submit" class="btn btn-primary form-control"><i class="fa fa-search" aria-hidden="true"></i></button>
             </div>
         </form>
-        
+        <button class="btn btn-primary" id="refresh-patients"> <i class="fa fa-arrow-circle-down" aria-hidden="true"></i> &nbsp; Actualiser Les Demandes</button>
+        <br>
         <div class="labtab">
             <table id="laboratin-table" class="table">
                 <thead>
@@ -38,8 +39,9 @@
         </div>
 
     </div>
+    
     <button class="btn btn-danger" id="deconnect-lab"><i class="fas fa-door-closed"></i> Déconexion</button>
-
+    
     <script src="../../scripts/laboratin/laboratin.js"></script>
 </body>
 </html>

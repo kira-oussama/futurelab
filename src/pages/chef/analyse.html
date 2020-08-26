@@ -1,0 +1,49 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../styles/bootstrap.min.css" />
+    <link rel="stylesheet" href="../../styles/mainStyle.css" />
+    <link rel="stylesheet" href="../../icons/css/all.min.css" />
+    <title>Analyse</title>
+</head>
+<body class="p-5">
+    <div class="comptable-analyse-container">
+        <form id="addAnalyseForm">
+            <fieldset>
+                <legend>Ajouter Une Analyse</legend>
+                <div class="form-group">
+                    <input type="text" class="form-control" id="analyse-name" placeholder="Entrez le nom de l'analyse " required/>
+                  </div>
+                  <div class="form-group">
+                    <input type="number" class="form-control" id="analyse-price" min="0" placeholder="Entrez le prix de l'analyse " required/>
+                  </div>
+                  <button type="submit" class="btn btn-primary"><i class="fas fa-calendar-plus-o" aria-hidden="true"> Ajouter </i></button>
+            </fieldset>
+        </form>
+        <form id="analyse-search-form" class="row w-100">
+            <div class="form-group">
+                <input type="text" class="form-control" id="analyse-search-input" min="0" placeholder="Entrez le nom de l'analyse " required/>
+            </div>&nbsp;
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary form-control"><i class="fas fa-search" aria-hidden="true"></i></button>
+            </div>
+        </form>
+        <div class="show-analyse">
+            <table id="analyses-table" class="table">
+                <thead>
+                    <tr>
+                        <th>analyse</th>
+                        <th>prix</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <script src="../../scripts/chef/analyse.js"></script>
+</body>
+</html>

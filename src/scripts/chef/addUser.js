@@ -8,7 +8,6 @@ document.getElementById("add-user-form-form").addEventListener("submit",e=>{
     var grade = document.getElementById("grade").value;
    // main.test({email,password,grade});
     
-    
     main.addUser({
         email,
         password,

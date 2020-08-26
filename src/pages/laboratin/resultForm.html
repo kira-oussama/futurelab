@@ -5,7 +5,7 @@
     <link rel="stylesheet" href="../../styles/bootstrap.min.css" />
     <link rel="stylesheet" href="../../styles/mainStyle.css" />
     <link rel="stylesheet" href="../../icons/css/all.min.css" />
-    <title>Laboratin</title>
+    <title>specialiste</title>
 </head>
 <body>
     
@@ -13,26 +13,29 @@
 
         <form id="result-submit-form">
             <div class="form-group">
-              <input type="text" class="form-control" id="tres" placeholder="Type de Resultat">
+              <input type="text" class="form-control" id="tres" placeholder="Type de Resultat" required>
             </div>
             
             <div class="form-group">
-                <input type="number" min="0" class="form-control" id="res" placeholder="Résultat">
+                <input type="number" min="0" class="form-control" id="res" placeholder="Résultat" required>
             </div>
 
             <div class="form-group">
-              <input type="text" class="form-control" id="uni" placeholder="Unité">
+              <input type="text" class="form-control" id="uni" placeholder="Unité" required>
             </div>
 
             <div class="form-group">
-              <input type="text" class="form-control" id="nor" placeholder="Normes">
+              <input type="text" class="form-control" id="nor" placeholder="Normes" required>
             </div>
 
             <div class="form-group">
-              <input type="text" class="form-control" id="ant" placeholder="Antériorité">
+              <input type="text" class="form-control" id="ant" placeholder="Antériorité" required>
             </div>
+            
+             <textarea id="remark" class="form-control" placeholder="Ajouter la remarque" id="" cols="30" rows="5"></textarea>
+             <hr>
 
-            <button type="submit" class="btn btn-primary"><i class="fas fa-plus" aria-hidden="true"></i> Ajouter</button>
+            <button type="submit" class="btn btn-success"><i class="fas fa-check" aria-hidden="true"></i> Valider</button>
         </form>
 
     </div>

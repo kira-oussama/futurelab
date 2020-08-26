@@ -42,7 +42,6 @@ window.addEventListener("load" , async () => {
 
 const consulterPatient = async (id)=>{
    var patient = await main.getPatient(id);
-   console.log(patient[0][0].societe)
    var patientInfo = {
        patientId: patient[0][0].patientId,
        nom: patient[0][0].nom,

@@ -4,9 +4,9 @@ const jsPDF = require("jspdf");
 
 window.addEventListener("load", async e => {
     let analyses = await main.getAllanalyses();
-    let colors = await main.getAllColors();
+    //let colors = await main.getAllColors();
     let select = document.getElementById("demande-analyse-select");
-    let colorSelect = document.getElementById("demande-analyse-color-select");
+    //let colorSelect = document.getElementById("demande-analyse-color-select");
     
     for(let i=0; i < analyses[0].length ; i++){
         let option = document.createElement("option");
@@ -14,13 +14,14 @@ window.addEventListener("load", async e => {
         option.innerHTML = analyses[0][i].nom;
         select.appendChild(option);
     }
-
+    /*
     for(let j=0; j< colors[0].length ; j++){
         let option = document.createElement("option");
         option.value = colors[0][j].colorId;
         option.innerHTML = colors[0][j].color;
         colorSelect.appendChild(option);
     }
+    */
 
 });
 
@@ -28,32 +29,24 @@ window.addEventListener("load", async e => {
 document.getElementById("demande-analyse-form").addEventListener("submit", async e=>{
     e.preventDefault();
 
-    let cid =  document.getElementById("demande-analyse-color-select").value;
+   // let cid =  document.getElementById("demande-analyse-color-select").value;
     let aid =  document.getElementById('demande-analyse-select').value;
     let pid = JSON.parse(localStorage.getItem("patient"));
     pid = pid.patientId;
-    let number = document.getElementById("color-number").value;
+
+    //let number = document.getElementById("color-number").value;
     const patient = await main.getPatient(pid);
-    const clr = await main.getColorById(cid);
-
-    var tickets = new jsPDF();
-
-    let spacing = 10;
-    for(let i= 0; i< number ; i++){
-        tickets.setTextColor("#000");
-        tickets.setFontSize(10);
-        tickets.text(`N ${patient[0][0].patientId}` , 10, spacing);
-        spacing += 5;
-        tickets.text(`Nom ${patient[0][0].nom}` , 10, spacing);
-        spacing += 5;
-        tickets.text(`Prénom ${patient[0][0].prenom}` , 10, spacing);
-        spacing += 5;
-        tickets.text(`couleur ${clr[0][0].color}` , 10, spacing);
-        spacing += 10;
+    
+    let baseEntentCode='1001'
+    if((patient[0][0].codeEntent)===baseEntentCode){
+        // if patient is from base entent
+        main.demanderAnalyse(pid, aid);
+    }else{
+        //if patient is from anouther entent
+        main.demanderAnalysedirect(pid, aid);
     }
+    
+   
+    main.closeWindow();
 
-    tickets.save(`tecket.pdf`);
-
-    main.demanderAnalyse(pid, aid, cid);
-    // main.closeWindow();
 });

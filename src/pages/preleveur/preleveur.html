@@ -1,0 +1,47 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../styles/bootstrap.min.css" />
+    <link rel="stylesheet" href="../../styles/mainStyle.css" />
+    <link rel="stylesheet" href="../../icons/css/all.min.css" />
+    <title>preleveur</title>
+</head>
+<body>
+   <hr>
+    <h1 id="pagetitle">preleveur</h1>
+    <hr />
+    <div class="chef-container">
+        <div class="convontion">
+        </div>
+        <div class="demande">
+            <h3 class="text-light">Demandes</h3>
+            <div class="show-demende">
+                <table id="demende-table" class="table">
+                    <thead>
+                        <tr class="text-light">                            
+                            <th>Nom de Patient</th>
+                            <th>Total des demandes</th>
+                            <th></th>
+                            
+                        </tr>
+                    </thead>
+                    <tbody id="dem">
+                        
+                        
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="option">
+            <button class="btn btn-primary" id="refresh"> <i class="fa fa-arrow-circle-down" aria-hidden="true"></i> &nbsp; Actualiser Les demandes</button>
+            <button class="btn btn-danger my-2 w-100" id="deconnect" ><i class="fas fa-door-closed"></i> Déconexion</button>
+        </div>
+        
+    </div>
+    
+
+   
+    <script src="../../scripts/preleveur/preleveur.js"></script>
+</body>
+</html>
