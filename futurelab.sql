@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jun 28, 2020 at 12:12 AM
+-- Generation Time: Aug 27, 2020 at 12:05 AM
 -- Server version: 10.4.13-MariaDB
 -- PHP Version: 7.4.7
 
@@ -38,9 +38,11 @@ CREATE TABLE `analyses` (
 --
 
 INSERT INTO `analyses` (`analyseId`, `nom`, `prix`) VALUES
-(1, 'something', 2000),
-(7, 'test', 1800),
-(8, 'thing', 5000);
+(14, 'adn', 3000),
+(19, 'tsh', 2000),
+(20, 'irm', 2000),
+(21, 'fns', 4000),
+(22, 'groupage', 400);
 
 -- --------------------------------------------------------
 
@@ -52,22 +54,29 @@ CREATE TABLE `analyses_patients` (
   `apId` int(11) NOT NULL,
   `analyseId` int(11) NOT NULL,
   `patientId` int(11) NOT NULL,
-  `colorId` int(5) NOT NULL,
+  `colorId` int(5) DEFAULT NULL,
   `payed` tinyint(1) NOT NULL DEFAULT 0,
   `demande_date` timestamp NOT NULL DEFAULT current_timestamp(),
   `validated` tinyint(1) NOT NULL DEFAULT 0,
-  `waiting` tinyint(1) NOT NULL DEFAULT 0
+  `waiting` tinyint(1) NOT NULL DEFAULT 0,
+  `imprimer` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
 -- Dumping data for table `analyses_patients`
 --
 
-INSERT INTO `analyses_patients` (`apId`, `analyseId`, `patientId`, `colorId`, `payed`, `demande_date`, `validated`, `waiting`) VALUES
-(1, 1, 25, 1, 0, '2020-06-26 15:20:13', 1, 1),
-(2, 7, 23, 1, 0, '2020-06-26 15:13:58', 1, 1),
-(4, 1, 23, 3, 0, '2020-06-26 15:29:28', 1, 1),
-(9, 1, 27, 1, 0, '2020-06-27 22:10:58', 0, 0);
+INSERT INTO `analyses_patients` (`apId`, `analyseId`, `patientId`, `colorId`, `payed`, `demande_date`, `validated`, `waiting`, `imprimer`) VALUES
+(1, 14, 48, NULL, 0, '2020-08-26 14:40:16', 0, 0, 0),
+(2, 19, 48, NULL, 0, '2020-08-26 14:40:21', 0, 0, 1),
+(3, 20, 48, NULL, 0, '2020-08-26 14:40:26', 0, 0, 1),
+(4, 21, 48, NULL, 0, '2020-08-26 14:40:31', 0, 0, 1),
+(5, 22, 49, NULL, 0, '2020-08-26 14:40:42', 0, 0, 0),
+(6, 20, 49, NULL, 0, '2020-08-26 14:40:47', 0, 0, 0),
+(7, 20, 50, NULL, 0, '2020-08-26 14:41:04', 0, 0, 0),
+(8, 22, 50, NULL, 0, '2020-08-26 14:41:08', 0, 0, 0),
+(9, 19, 46, NULL, 0, '2020-08-26 15:06:59', 0, 1, 1),
+(10, 14, 47, NULL, 0, '2020-08-26 15:07:05', 0, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -87,8 +96,11 @@ CREATE TABLE `colors` (
 INSERT INTO `colors` (`colorId`, `color`) VALUES
 (1, 'blue'),
 (2, 'green'),
+(8, 'gris'),
+(6, 'jaune'),
 (3, 'red'),
-(4, 'yellow');
+(9, 'rose'),
+(7, 'violet');
 
 -- --------------------------------------------------------
 
@@ -107,7 +119,30 @@ CREATE TABLE `conventions` (
 --
 
 INSERT INTO `conventions` (`societe`, `pourcentage`, `type`) VALUES
-('cia', 33, 'partial');
+('opji', 20, 'total'),
+('tls', 22, 'total');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `entente`
+--
+
+CREATE TABLE `entente` (
+  `code` varchar(10) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `nom` varchar(30) NOT NULL,
+  `address` varchar(30) NOT NULL,
+  `telephone` varchar(10) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `entente`
+--
+
+INSERT INTO `entente` (`code`, `nom`, `address`, `telephone`) VALUES
+('1001', 'sidi mabrouk', 'sidi mabrouk constantine 123', '0540037444'),
+('1002', 'bosouf', 'bosouf constantine 4994', '0560048905'),
+('1003', 'hamma bouziyan', 'hamma bouziyan centre 109', '0540037061');
 
 -- --------------------------------------------------------
 
@@ -122,17 +157,22 @@ CREATE TABLE `patients` (
   `prenom` varchar(30) COLLATE utf8_bin NOT NULL,
   `sexe` enum('male','female') COLLATE utf8_bin NOT NULL,
   `dn` date NOT NULL,
-  `numero` varchar(10) COLLATE utf8_bin NOT NULL
+  `numero` varchar(10) COLLATE utf8_bin NOT NULL,
+  `codeEntent` varchar(10) COLLATE utf8_bin NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
 -- Dumping data for table `patients`
 --
 
-INSERT INTO `patients` (`patientId`, `societe`, `nom`, `prenom`, `sexe`, `dn`, `numero`) VALUES
-(23, 'cia', 'amri', 'abdelkrim', 'male', '1999-10-29', '0554226805'),
-(25, NULL, 'hero', 'hamada', 'male', '1999-02-09', '0546484984'),
-(27, NULL, 'omar ', 'dine', 'male', '1999-11-25', '0554784456');
+INSERT INTO `patients` (`patientId`, `societe`, `nom`, `prenom`, `sexe`, `dn`, `numero`, `codeEntent`) VALUES
+(45, NULL, 'elouafi', 'nesrine', 'female', '2000-03-01', '0540392872', '1002'),
+(46, NULL, 'amri ', 'abdelkrim', 'male', '1999-10-29', '0554226805', '1003'),
+(47, NULL, 'cheikh boukal', 'ouail nazim', 'male', '2000-01-15', '0540037061', '1003'),
+(48, NULL, 'lamaara', 'razzan', 'female', '2000-03-15', '0568383833', '1001'),
+(49, NULL, 'rekab ', 'abir', 'female', '2000-02-05', '0784444444', '1001'),
+(50, NULL, 'khengi', 'nour', 'female', '1998-06-22', '0882822222', '1001'),
+(51, NULL, 'boulsina ', 'baha edinne', 'male', '1999-12-06', '0399999999', '1002');
 
 -- --------------------------------------------------------
 
@@ -146,14 +186,6 @@ CREATE TABLE `resultats` (
   `edition_date` timestamp NOT NULL DEFAULT current_timestamp(),
   `remarque` varchar(250) COLLATE utf8_bin DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-
---
--- Dumping data for table `resultats`
---
-
-INSERT INTO `resultats` (`resultId`, `patientId`, `edition_date`, `remarque`) VALUES
-(11, 23, '2020-06-26 15:30:20', NULL),
-(12, 23, '2020-06-26 15:30:44', NULL);
 
 -- --------------------------------------------------------
 
@@ -171,14 +203,6 @@ CREATE TABLE `typesresultats` (
   `Antériorité` varchar(10) COLLATE utf8_bin NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
---
--- Dumping data for table `typesresultats`
---
-
-INSERT INTO `typesresultats` (`typeId`, `resultId`, `resultname`, `resultat`, `Unité`, `normes`, `Antériorité`) VALUES
-(10, 11, 'test', 55, '55', '55', '55'),
-(11, 12, 'something', 66, '66', '66', '66');
-
 -- --------------------------------------------------------
 
 --
@@ -189,7 +213,7 @@ CREATE TABLE `users` (
   `userId` int(11) NOT NULL,
   `email` varchar(30) COLLATE utf8_bin NOT NULL,
   `password` varchar(30) COLLATE utf8_bin NOT NULL,
-  `grade` enum('sec','com','lab','med') COLLATE utf8_bin NOT NULL
+  `grade` enum('sec','com','lab','med','chef','perv') COLLATE utf8_bin NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
@@ -197,10 +221,12 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`userId`, `email`, `password`, `grade`) VALUES
-(1, 'kira@oussama.com', 'kiraoussama', 'sec'),
+(1, 'kira@gmail.com', 'kira', 'sec'),
 (2, 'com@gmail.com', 'com', 'com'),
 (3, 'lab@gmail.com', 'lab', 'lab'),
-(4, 'med@gmail.com', 'med', 'med');
+(4, 'med@gmail.com', 'med', 'med'),
+(5, 'chef@mail.com', 'chef', 'chef'),
+(13, 'pr@gmail.com', 'pr', 'perv');
 
 --
 -- Indexes for dumped tables
@@ -235,11 +261,18 @@ ALTER TABLE `conventions`
   ADD PRIMARY KEY (`societe`);
 
 --
+-- Indexes for table `entente`
+--
+ALTER TABLE `entente`
+  ADD PRIMARY KEY (`code`);
+
+--
 -- Indexes for table `patients`
 --
 ALTER TABLE `patients`
   ADD PRIMARY KEY (`patientId`),
-  ADD KEY `convention_patientfk` (`societe`);
+  ADD KEY `convention_patientfk` (`societe`),
+  ADD KEY `codeEntent` (`codeEntent`);
 
 --
 -- Indexes for table `resultats`
@@ -270,43 +303,43 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `analyses`
 --
 ALTER TABLE `analyses`
-  MODIFY `analyseId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `analyseId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT for table `analyses_patients`
 --
 ALTER TABLE `analyses_patients`
-  MODIFY `apId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `apId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `colors`
 --
 ALTER TABLE `colors`
-  MODIFY `colorId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `colorId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `patients`
 --
 ALTER TABLE `patients`
-  MODIFY `patientId` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+  MODIFY `patientId` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
 
 --
 -- AUTO_INCREMENT for table `resultats`
 --
 ALTER TABLE `resultats`
-  MODIFY `resultId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `resultId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
 
 --
 -- AUTO_INCREMENT for table `typesresultats`
 --
 ALTER TABLE `typesresultats`
-  MODIFY `typeId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `typeId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `userId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `userId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- Constraints for dumped tables
@@ -324,7 +357,8 @@ ALTER TABLE `analyses_patients`
 -- Constraints for table `patients`
 --
 ALTER TABLE `patients`
-  ADD CONSTRAINT `convention_patientfk` FOREIGN KEY (`societe`) REFERENCES `conventions` (`societe`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `convention_patientfk` FOREIGN KEY (`societe`) REFERENCES `conventions` (`societe`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `entante_patient` FOREIGN KEY (`codeEntent`) REFERENCES `entente` (`code`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `resultats`
