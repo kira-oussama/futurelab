@@ -20,7 +20,7 @@
     "electron": "^9.0.3"
   },
   "dependencies": {
-    "jspdf": "^1.5.3",
+    "jspdf": "^2.3.1",
     "mysql": "^2.18.1"
   }
 }
